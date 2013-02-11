@@ -65,7 +65,7 @@ output = ((MSB_Data<<12)|(CSB_Data<<4)|LSB_Data);   //all output data put togeth
 
 
    PrintSignedNumber(output);
-  delay(50);     
+  delay(10);     
 }
 
 void PrintSignedNumber(unsigned long twoscomp){
