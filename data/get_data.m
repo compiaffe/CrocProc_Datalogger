@@ -1,9 +1,13 @@
-%clear all
+clear all
+clc
 load wave-at-600-1000.mat
 windowSize1 = 30;
 windowSize2 = 25;
 windowSize3 = 20;
 windowSize4 = 15;
+%%wave recognition
+wavewindow = 70;
+waveheight = 100;
 
 %%fft transform parameters
 Fs = 50;
@@ -24,24 +28,28 @@ title('Pressure, raw and with running average');
 xlabel('Time [# Datapoints]  - Raw');ylabel('Pressure [Pa]');
 
 subplot(5,1,2);
-plot(filter(ones(1,windowSize1)/windowSize1,1,YData));
+t1 = filter(ones(1,windowSize1)/windowSize1,1,YData);
+plot(t1);
 axis([0 numel(YData) 97900 99000]);
 xlabel('Time [# Datapoints] - average with windowsize 30');ylabel('[Pa]');
 
 subplot(5,1,3);
-plot(filter(ones(1,windowSize2)/windowSize2,1,YData));
+t2 = filter(ones(1,windowSize2)/windowSize2,1,YData);
+plot(t2);
 axis([0 numel(YData) 97900 99000]);
 xlabel('Time [# Datapoints] - average with windowsize 25');ylabel('[Pa]');
 
 
 subplot(5,1,4);
-plot(filter(ones(1,windowSize3)/windowSize3,1,YData));
+t3 = filter(ones(1,windowSize3)/windowSize3,1,YData);
+plot(t3);
 axis([0 numel(YData) 97900 99000]);
 xlabel('Time [# Datapoints] - average with windowsize 20');ylabel('[Pa]');
 
 
 subplot(5,1,5);
-plot(filter(ones(1,windowSize4)/windowSize4,1,YData));
+t4 = filter(ones(1,windowSize4)/windowSize4,1,YData);
+plot(t4);
 axis([0 numel(YData) 97900 99000]);
 xlabel('Time [# Datapoints] - average with windowsize 15');ylabel('[Pa]');
 
@@ -59,7 +67,23 @@ title('Single-Sided Amplitude Spectrum of y(t)')
 xlabel('Frequency (Hz)')
 ylabel('|Y(f)|')
 
-figure(3);
-plot(filter(Hbp,YData));
+%% find the wave
 
+filtered = filter(ones(1,windowSize1)/windowSize1,1,YData);
+wave = zeros(2000);
+for x = 1:(2000-wavewindow)
+    if (filtered(x)-filtered(x+wavewindow) >=waveheight)
+        fprintf('Wave at YData = %d\n',x);
+        wave(x)=max(t1)-500;
+    else
+        wave(x) = max(t1)-1000;
+    end
+end
+hold on
+figure(1);
+subplot(5,1,2);
+hold on
+p = plot(wave);
+set(p,'Color','red');
+hold off
 
