@@ -13,6 +13,7 @@
 #include <I2C.h>
 
 #define baro 0x60
+#define 2timesaverage+derv 60
 
  char OUT_P_MSB = 0x01;
   char OUT_P_CSB = 0x02;
@@ -21,7 +22,6 @@
   char OUT_T_LSB = 0x05;  
   char CTRL_REG1 = 0x26;  
   char set_OST = 0x02;
-  
   unsigned long MSB_Data = 0; 
   unsigned long CSB_Data = 0; 
   unsigned long LSB_Data = 0; 
@@ -32,7 +32,7 @@ void setup()
 {
   I2c.begin();        // join i2c bus (address optional for master)
   I2c.pullup(0);
-  Serial.begin(9600);  // start serial for output
+  Serial.begin(115200);  // start serial for output
 }
 
 void loop()
@@ -62,8 +62,7 @@ output = ((MSB_Data<<12)|(CSB_Data<<4)|LSB_Data);   //all output data put togeth
 //  Serial.print("LSB ");
 //  Serial.println(LSB_Data,BIN);
   //Serial.println(output,BIN);
-
-
+/*average the output*/
    PrintSignedNumber(output);
   delay(10);     
 }
