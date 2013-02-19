@@ -1,0 +1,13 @@
+clear all
+clc
+close all
+%Delete previous connections
+delete(instrfind({'Port'},{'/dev/tty.usbserial-A900abKE'}));
+%Create a serial connection
+s = serial('/dev/tty.usbserial-A900abKE','BaudRate',115200,'Terminator','CR/LF');
+warning('off','MATLAB:serial:fscanf:unsuccessfulRead');
+%Open Port
+fopen(s);
+%Initialize the variables
+Nvalues=2000; %Number of values ??we want to read
+m1=zeros(1,Nvalues);

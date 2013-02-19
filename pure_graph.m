@@ -11,7 +11,7 @@ fopen(s);
 %Initialize the variables
 Nvalues=2000; %Number of values ??we want to read
 m1=zeros(1,Nvalues);
-windowSize1 = 30;
+
 i=1;
 k=0;
 tic;
@@ -26,32 +26,13 @@ while k<Nvalues
     end
     
     figure(1);
-    subplot(4,1,1); %plot the raw input
+    %subplot(4,1,1); %plot the raw input
     plot(m1);
-    xlabel('Time [# Datapoints]');ylabel('Pressure [Pa]');
+        xlabel('Time [# Datapoints]');ylabel('Pressure [Pa]');
     %axis([0 Nvalues 94000 105000])
     axis([0 Nvalues min(m1)-200 max(m1)+200]);
     
-    if i > windowSize1 %plot the averaged (low passed values)
-        
-        subplot(4,1,2);
-        f1 = filter(ones(1,windowSize1)/windowSize1,1,m1);
-        plot(f1);
-        xlabel('Time - Running average windowsize 30');ylabel('[Pa]');
-        %axis([0 Nvalues 94000 105000])
-        axis([0 Nvalues min(m1)-200 max(m1)+200]);
-        
-        if i > ((windowSize1*2) +1)
-            subplot(4,1,3);
-            f2(i) = filter(ones(1,windowSize1)/windowSize1,1,(f1(i)-f1(i-1)));
-            plot(f2);
-            xlabel('Time - Averaged derivative of above');ylabel('[Pa]');
-            axis([0 Nvalues -5 5]);
-        end
-    end
-    
-    %Increment the counter
-    i=i+1;
+      i=i+1;
     k=k+1;
 end
 fclose(s);
