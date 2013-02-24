@@ -32,8 +32,9 @@
 
 unsigned long raw = 0; //the raw input value in binary
 unsigned long averaged[2]; //the averaged value
+unsigned long derivative;
 unsigned long output = 0; //the output value after it has been worked - in binary
-unsigned long input[32]; //the 32 word FIFO buffer
+unsigned long input[30]; //the 32 word FIFO buffer
 
 unsigned int counter = 1;
 unsigned int i;
@@ -68,19 +69,22 @@ input[0] = raw;
 
 /*average the output*/
 
-if(counter <=32){
+if(counter <=30){
     output = input[0];  
     PrintSignedNumber(output);
     counter++;
  
   }
   else{
+    average[1] = average[0];
     averaged[0] = 0;
   for(i = 0;i<30;i++){
       averaged[0] = averaged[0]+input[i];
   }  
   averaged[0] = (averaged[0]/30);
-  PrintSignedNumber(averaged[0]);
+  derivative = averaged[1]-averaged[0];
+  
+  PrintSignedNumber(derivative);
   }
   
  #if 0 
