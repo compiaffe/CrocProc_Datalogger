@@ -47,8 +47,8 @@ unsigned int SingleBarometerRead(unsigned long *);
 void setup()
 {
   I2c.begin();        // join i2c bus (address optional for master)
-   mTWBR = 12;         //set the I2C frequency to 400kHz 
-  I2c.pullup(0);
+   TWBR = 12;         //set the I2C frequency to 400kHz 
+  I2c.pullup(1);
   Serial.begin(115200);  // start serial for output
 }
 
