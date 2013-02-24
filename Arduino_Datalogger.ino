@@ -7,7 +7,7 @@
 // accuracy. It calculates the averages over a 30 sample long period
 
 
-#include <Wire.h>
+#include <I2C.h>
 #define CP_OK 1
 #define CP_ERROR 0
 
@@ -36,10 +36,9 @@ unsigned long output = 0; //the output value after it has been worked - in binar
 unsigned long input[32]; //the 32 word FIFO buffer
 
 unsigned int counter = 1;
-unsigned int i,x;
+unsigned int i;
 unsigned int delay_val = 1800;
 unsigned int time = 0;
-unsigned int time2 = 0;
 
 
 void PrintSignedNumber(unsigned long );
@@ -47,14 +46,15 @@ unsigned int SingleBarometerRead(unsigned long *);
 
 void setup()
 {
-  Wire.begin();        // join i2c bus (address optional for master)
-   TWBR = 12;         //set the I2C frequency to 400kHz 
+  I2c.begin();        // join i2c bus (address optional for master)
+   mTWBR = 12;         //set the I2C frequency to 400kHz 
+  I2c.pullup(0);
   Serial.begin(115200);  // start serial for output
 }
 
 void loop()
 {
-for(x = 0;x<4;x++){  
+  
  time = micros(); //store the start time of our reads
  SingleBarometerRead(&raw);
 
@@ -71,7 +71,8 @@ input[0] = raw;
 if(counter <=32){
     output = input[0];  
     PrintSignedNumber(output);
-    counter++; 
+    counter++;
+ 
   }
   else{
     averaged[0] = 0;
@@ -82,30 +83,19 @@ if(counter <=32){
   PrintSignedNumber(averaged[0]);
   }
   
-  
-    time2 = micros(); //how much time has evolved since we started the read and
-    time2 = time2-time;
-    Serial.print(time2,DEC); 
-   Serial.println("Hz - time before Adjustment"); 
-
- #if 1 
+ #if 0 
   /*ensure a sample rate of about 500Hz*/
-  //time2 = (micros()-time); //how much time has evolved since we started the read and
- if((Period500Hz-time2)> 0){ 
-     delayMicroseconds(Period500Hz-time2); 
+  time = (micros()-time); //how much time has evolved since we started the read and
+ if((Period500Hz-time)> 0){ 
+     delayMicroseconds(Period500Hz-time); 
  }else{
    for(i = 0; i>10;i++){
      Serial.print("cannot run at 500Hz sampling rate");  
      delay(1000);  
    }  
-  }
-  
-   time2 = (micros()-time); //how much time has evolved since we started the read and
-   Serial.print(time2,DEC); 
-   Serial.println("Hz - time after "); 
+ }
  #endif
  
-}
 }
 
 
@@ -142,14 +132,14 @@ unsigned int SingleBarometerRead(unsigned long *raw){
   unsigned long LSB_Data = 0; 
   
   
-    Wire.write(baro,CTRL_REG1,set_OST); //initiates a single barometer read.  
-    Wire.read(baro,OUT_P_MSB,8);
+    I2c.write(baro,CTRL_REG1,set_OST); //initiates a single barometer read.  
+    I2c.read(baro,OUT_P_MSB,8);
     MSB_Data = I2c.receive();//these are the 8 MSB out of the total of 20-bit
     
-    Wire.read(baro,OUT_P_CSB,8);
+    I2c.read(baro,OUT_P_CSB,8);
     CSB_Data = I2c.receive();//these are the 8 CSB out of a total of 20-bits
     
-    Wire.read(baro,OUT_P_LSB,8);
+    I2c.read(baro,OUT_P_LSB,8);
     LSB_Data = (I2c.receive()>>4);//these are the 4 LSB of the 20-bit output. 
     //The bitmap of the value received from the barometer however places these at the 4 MSB positions of the 8-bit word received. 
     //The lower 4-bits are '0'. THus we rightshift to get rid of these.

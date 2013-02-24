@@ -18,8 +18,7 @@ tic;
 starttime = tic;
 while k<Nvalues
     %Read the serial port
-    a = fgetl(s);
-    %a = fscanf(s,'%f.%f')';
+    a = fscanf(s,'%f.%f')';
     if a(1) <= 110000
         m1(i)=a(1);
     else
@@ -37,7 +36,7 @@ while k<Nvalues
     k=k+1;
 end
 fclose(s);
-
+delete(s);
 elapsed_time = toc(starttime);
 fprintf('We read %d datapoints in %f seconds\n',Nvalues, elapsed_time);
 fprintf('The update rate is thus %f Hz\n',Nvalues/elapsed_time);
