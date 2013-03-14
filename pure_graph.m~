@@ -15,6 +15,7 @@ set(s,'DataBits', 8);
 set(s,'StopBits', 1);
 fopen(s);
 s.ReadAsyncMode = 'continuous';
+wait(
 
 
 readasync(s);
@@ -32,17 +33,16 @@ starttime = tic;
 
 s_data = zeros(Nvalues,3);
 
-while k<=Nvalues
+while k<Nvalues
     %Read the serial port
     m1 = fscanf(s, '%d');
     
-    if (m1 == 9999999 )
+    if (m1 == 999999 )
         s_data(k,1) = fscanf(s, '%d');
         s_data(k,2) = fscanf(s, '%d');
         s_data(k,3) = fscanf(s, '%d');
-        disp(k);
-        
         k=k+1;
+        disp(k);
     else
         fprintf('wrong line - %d\n',m1);
     end
@@ -66,27 +66,21 @@ for x = 1: Nvalues
     for y = 1:3
         if s_data(y) <150000 && s_data(y)> 50000
             if (s_data(y)>s_max)
-                s_max = s_data(y);
+                s_max = s(y);
             end
             if (s_data(y)<s_min)
-                s_min = s_data(y);
+                s_min = s(y);
             end
         end
     end
 end
 
-subplot(3,1,1);
-plot(s_data(:,1),'DisplayName','s_data(:,1)','YDataSource','s_data(:,1)');figure(gcf)
 
-subplot(3,1,2);
-plot(s_data(:,2),'DisplayName','s_data(:,2)','YDataSource','s_data(:,2)');figure(gcf)
-
-subplot(3,1,3);
-plot(s_data(:,end),'DisplayName','s_data(:,3)','YDataSource','s_data(:,3)');figure(gcf)
-
+plot(s,'DisplayName','s0','YDataSource','s(1)');hold all;plot(s0,'DisplayName','s1','YDataSource','s(2)');plot(s1,'DisplayName','s2','YDataSource','s(3)');hold off;figure(gcf);
 xlabel('Time [# Datapoints]');
 ylabel('Pressure [Pa]');
-%axis([0 Nvalues s_max-200 s_max+100]);
+axis([0 Nvalues s_min s_max]);
 fprintf('We read %d datapoints in %f seconds\n',Nvalues, elapsed_time);
 fprintf('The update rate is thus %f Hz\n',Nvalues/elapsed_time);
+%axis([0 Nvalues min(m1)-200 max(m1)+200]);
 
