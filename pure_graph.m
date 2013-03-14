@@ -5,12 +5,10 @@ delete(instrfindall);
 %Delete previous connections
 %delete(instrfind({'Port'},{'/dev/tty.usbserial-A900abKE'}));
 %Create a serial connection
-s = serial('/dev/tty.usbserial-A900abKE','BaudRate',115200,'Terminator','CR/LF');
+s = serial('/dev/tty.usbserial-A900abKE','BaudRate',57600,'Terminator','CR/LF');
 warning('off','MATLAB:serial:fscanf:unsuccessfulRead');
 %Open Port
 
-
-set(s,'BaudRate', 115200);
 set(s,'DataBits', 8);
 set(s,'StopBits', 1);
 fopen(s);
@@ -20,7 +18,7 @@ s.ReadAsyncMode = 'continuous';
 readasync(s);
 
 %Initialize the variables
-Nvalues=50; %Number of values ??we want to read
+Nvalues=500; %Number of values ??we want to read
 m1=zeros(1,Nvalues);
 
 i=1;
