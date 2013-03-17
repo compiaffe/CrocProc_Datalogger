@@ -74,5 +74,5 @@ fprintf('We read %d datapoints in %f seconds\n',Nvalues, elapsed_time);
 fprintf('The update rate is thus %f Hz\n',Nvalues/elapsed_time);
 
 plot_data( s_data );
-wave = find_wave(s_data, 0.6, -0.6, 10000000 );
-%waves = find_wave(s_data);
+wave = find_wave(s_data, 0.35, -0.3, 10000000 );
+direction = triangulate(wave);
