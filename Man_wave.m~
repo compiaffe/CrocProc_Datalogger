@@ -1,0 +1,15 @@
+clear new_Data
+new_Data(:,1) = s_data(:,1);
+new_Data(:,2) = s_data(:,2);
+new_Data(:,4) = s_data(:,3);
+new_Data(:,6) = s_data(:,4);
+new_Data(:,7) = zeros(length(s_data),1);
+
+
+for x = 2:length(s_data)
+tempderv(x-1) = s_data(x,1)-s_data(x-1);
+end
+mtd = mean(tempderv);
+stim_time = 0.09;
+
+elements_per_bin = round(stim_time/(mtd/1000000));

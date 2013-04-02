@@ -42,11 +42,11 @@ for x = 2: length(s_data)
         
     end
 end
-windowSize = 30;
-s_derv2(:,1)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,1));
-s_derv2(:,2)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,2));
-s_derv2(:,3)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,3));
-
+% windowSize = 30;
+% s_derv2(:,1)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,1));
+% s_derv2(:,2)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,2));
+% s_derv2(:,3)= filter(ones(1,windowSize)/windowSize,1,s_derv(:,3));
+s_derv2 = s_derv;
 
 s_min = 0;
 s_max = 0;
@@ -67,7 +67,7 @@ end
 subplot(3,2,2);
 plot(s_data(:,1),s_derv2(:,1),'DisplayName','s_derv2(:,1)','YDataSource','s_derv2(:,1)');
 axis([s_data(1,1) s_data(length(s_data),1) s_min-1 s_max+1]);
-title('Running average of 20');
+title('Derivative');
 subplot(3,2,4);
 plot(s_data(:,1),s_derv2(:,2),'DisplayName','s_derv2(:,2)','YDataSource','s_derv2(:,2)');
 axis([s_data(1,1) s_data(length(s_data),1) s_min-1 s_max+1]);

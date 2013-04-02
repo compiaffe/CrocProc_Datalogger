@@ -14,7 +14,7 @@ set(s,'DataBits', 8);
 set(s,'StopBits', 1);
 
 %Initialize the variables
-Nvalues=300; %Number of values ??we want to read
+Nvalues=100; %Number of values ??we want to read
 m1=zeros(1,4);
 
 i=1;
@@ -22,7 +22,7 @@ k=1;
 exit = 0;
 tic;
 starttime = tic;
-start = -15;
+start = -100;
 s_data = zeros(Nvalues,4);
 
 
